@@ -3,6 +3,8 @@ const net = require('net')
 const fs = require('fs');
 var servers = require('./servers.json');
 
+var maps = 'ID              | Mode  | Map\n---------------------------------\nUGC1664873782   | SND   | Dust II\nUGC1996841374   | SND   | Prodigy\nUGC1695916905   | SND   | Cache\nUGC2007531312   | SND   | Sitalas\nUGC1996841374   | SND   | The Suburbs\nUGC2019786310   | SND   | de_seaside\nUGC2013358920   | SND   | Pipes\nUGC1921083944   | SND   | Colombian Jungle\nUGC1080743206   | SND   | Office HQ\nUGC1661803933   | SND   | Mirage\nUGC1884572674   | SND   | Terminal MW2\nUGC1739104662   | DM    | Rust\nUGC1401905027   | SND   | Lake\nUGC1661039078   | SND   | Inferno\nUGC1758245796   | SND   | Nuke Town 2025\nUGC1397109851   | SND   | Militia\nUGC1732095389   | DM    | Shipment\nUGC1679531002   | SND   | Industry 4.21\nUGC1717551845   | SND   | Nuke\nUGC1677995860   | SND   | Train\nUGC1701860633   | SND   | Oilrig\nUGC1984149656   | SND   | Mcdonalds\nUGC1844407640   | SND   | Italy\nUGC1675048033   | DM    | aim_map\nUGC1701685151   | SND   | Cobblestone\nUGC1702579126   | SND   | Ritalo\nUGC1676961583   | SND   | Overpass\nUGC1677185215   | DM    | duel_aim\nUGC957591808    | DM    | Chess\nUGC1522109413   | SND   | Crash\nUGC1543656302   | SND   | Carentan WW2\nUGC1711450123   | SND   | Vertigo\nUGC915741355    | SND   | Rush\nUGC1675848285   | DM    | aim_usp\nUGC1578183847   | SND   | United 747\nUGC963409179    | SND   | Aztec Beta ready\nUGC1944987722   | SND   | Manor 2020\nUGC2029069487   | SND   | Chateau\nUGC1937414766   | SND   | de_legend\nUGC1693257484   | DM    | Pool_day\nUGC1118987487   | SND   | Bridge Crossing\nUGC1841772559   | DM    | Shoots\nUGC1864436286   | SND   | Assault\nUGC1411741987   | DM    | 4.21 The Office (Dunder Mifflin)\nUGC974295170    | DM    | Shipment Beta ready\nUGC1933240808   | SND   | Vertigo 2019\nUGC2008583441   | DM    | Time Heist\nUGC2045258277   | SND   | Berlin\nUGC2050496129   | SND   | Reachsky\nUGC1917540326   | SND   | Medical\nUGC1921083944   | SND   | Columbian Jungle\nUGC2008936831   | SND   | Gravity\n'
+
 serverPrompt()
 
 function serverPrompt() {
@@ -68,6 +70,7 @@ function commandPrompt(socket) {
                 commandPrompt(socket)
             }
             if (selected.command === 'SwitchMap') {
+				console.log(maps + '\nto change the map use the corresponding UGC-ID')
                 map = await anyPrompt('map', true)
                 mod = await anyPrompt('mod', true)
                 cmd = 'SwitchMap ' + map + ' ' + mod
