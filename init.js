@@ -5,6 +5,8 @@ var servers = require('./servers.json');
 
 var maps = 'ID              | Mode  | Map\n---------------------------------\nUGC1664873782   | SND   | Dust II\nUGC1996841374   | SND   | Prodigy\nUGC1695916905   | SND   | Cache\nUGC2007531312   | SND   | Sitalas\nUGC1996841374   | SND   | The Suburbs\nUGC2019786310   | SND   | de_seaside\nUGC2013358920   | SND   | Pipes\nUGC1921083944   | SND   | Colombian Jungle\nUGC1080743206   | SND   | Office HQ\nUGC1661803933   | SND   | Mirage\nUGC1884572674   | SND   | Terminal MW2\nUGC1739104662   | DM    | Rust\nUGC1401905027   | SND   | Lake\nUGC1661039078   | SND   | Inferno\nUGC1758245796   | SND   | Nuke Town 2025\nUGC1397109851   | SND   | Militia\nUGC1732095389   | DM    | Shipment\nUGC1679531002   | SND   | Industry 4.21\nUGC1717551845   | SND   | Nuke\nUGC1677995860   | SND   | Train\nUGC1701860633   | SND   | Oilrig\nUGC1984149656   | SND   | Mcdonalds\nUGC1844407640   | SND   | Italy\nUGC1675048033   | DM    | aim_map\nUGC1701685151   | SND   | Cobblestone\nUGC1702579126   | SND   | Ritalo\nUGC1676961583   | SND   | Overpass\nUGC1677185215   | DM    | duel_aim\nUGC957591808    | DM    | Chess\nUGC1522109413   | SND   | Crash\nUGC1543656302   | SND   | Carentan WW2\nUGC1711450123   | SND   | Vertigo\nUGC915741355    | SND   | Rush\nUGC1675848285   | DM    | aim_usp\nUGC1578183847   | SND   | United 747\nUGC963409179    | SND   | Aztec Beta ready\nUGC1944987722   | SND   | Manor 2020\nUGC2029069487   | SND   | Chateau\nUGC1937414766   | SND   | de_legend\nUGC1693257484   | DM    | Pool_day\nUGC1118987487   | SND   | Bridge Crossing\nUGC1841772559   | DM    | Shoots\nUGC1864436286   | SND   | Assault\nUGC1411741987   | DM    | 4.21 The Office (Dunder Mifflin)\nUGC974295170    | DM    | Shipment Beta ready\nUGC1933240808   | SND   | Vertigo 2019\nUGC2008583441   | DM    | Time Heist\nUGC2045258277   | SND   | Berlin\nUGC2050496129   | SND   | Reachsky\nUGC1917540326   | SND   | Medical\nUGC1921083944   | SND   | Columbian Jungle\nUGC2008936831   | SND   | Gravity\n'
 
+var items = '---,Cost,KillBonus,BaseDamage,ArmourDamage,ArmourPenetration,HelmetDamage,HelmetBleed\nak,1400,600,20,35,60,100,50\nuzi,950,600,20,20,10,50,25\n57,500,300,20,25,100,100,75\nautosniper,3500,100,35,60,100,100,100\nkar98,1600,800,50,60,100,100,100\nhunting,1200,0,50,60,100,100,100\nautoshotgun,1800,100,15,15,10,25,10\nlmga,3000,100,20,60,100,100,75\nsawedoff,1000,600,20,25,10,50,10\ndrumshotgun,4200,100,15,15,10,25,10\nmp5,1600,400,20,30,10,25,25\n1911,200,800,25,25,10,100,50\nde,800,600,40,35,100,100,100\nak47,2500,300,25,60,100,100,100\nak12,2700,300,20,45,100,100,75\nsock,500,600,20,30,10,50,50\nar,2700,300,20,45,100,100,75\nshotgun,1500,600,15,15,10,25,0\nsmg,1200,800,25,25,10,100,50\naug,2300,300,20,45,100,100,75\np90,2000,300,20,20,10,25,75\nrevolver,800,600,50,35,100,100,100\nflash,200,1200,0,0,0,0,0\nsmoke,300,0,0,0,0,0,0\nknife,100,1200,0,0,0,0,0\ngrenade,600,0,0,80,90,0,0\npliers,800,0,0,0,0,0,0\nsupp_pistol,250,-50,,,,,\nsupp_rifle,500,-200,,,,,\nscope,400,0,,,,,\ngrip_angled,300,-100,,,,,\ngrip_vertical,300,-150,,,,,\nacog,400,-50,,,,,\nholo,500,-150,,,,,\nreddot,500,-150,,,,,\n'
+
 serverPrompt()
 
 function serverPrompt() {
@@ -130,7 +132,25 @@ function commandPrompt(socket) {
                 }
 				commandPrompt(socket)
             }
+            if (selected.command === 'SetPlayerSkin') {
+				console.log(items)
+				console.log(await commandHandler(socket, 'RefreshList'))
+				console.log('pick the steamID of the player to skin from the list above')
+                steam64Id = await anyPrompt('steamId64', true)
+				console.log('clown\nprisoner\nnaked\nfarmer\nrussian\nnato\n')
+				console.log('enter the skinID you want to set')
+                skinID = await anyPrompt('string', true)
+                commandHandler(socket, `SetPlayerSkin ` + steam64Id.toString() + ' ' + skinID)
+                commandPrompt(socket)
+            }
+            if (selected.command === 'SetLimitedAmmoType') {
+				console.log('type a number between 0 and 2')
+				ammoID = await anyPrompt('int', true)
+                commandHandler(socket, 'SetLimitedAmmoType ' + ammoID.tostring())
+                commandPrompt(socket)
+            }
             if (selected.command === 'GiveItem') {
+				console.log(items)
 				console.log(await commandHandler(socket, 'RefreshList'))
 				console.log('pick the steamID of the player you want to give an item from the list above')
                 steam64Id = await anyPrompt('steamId64', true)
@@ -157,7 +177,6 @@ function commandPrompt(socket) {
                 console.log(await commandHandler(socket, 'RefreshList'))
                 commandPrompt(socket)
             }
-
             if (selected.command === 'Disconnect') {
                 console.log('Disconnecting..')
                 socket.destroy();
@@ -170,9 +189,26 @@ function commandPrompt(socket) {
 }
 
 
+
+function skinPrompt() {
+    return new Promise(resolve => {
+        inquirer.prompt([{
+            type: 'list',
+            name: 'skin',
+            message: 'select a skin',
+            choices: ["clown", "prisoner", "naked", "farmer", "russian", "nato"],
+        }, ]).then(selected => {
+            (async() => {
+                resolve(selected.skin)
+            })();
+        });
+    });
+}
+
+
+
 function teamPrompt() {
     return new Promise(resolve => {
-        // find a good delimiter
         inquirer.prompt([{
             type: 'list',
             name: 'team',
@@ -290,6 +326,12 @@ commands = [
 }, {
     "name": "Unban",
     "params": ["steamid"]
+}, {
+    "name": "SetPlayerSkin",
+    "params": ["steamid", "skinid"]
+}, {
+    "name": "SetLimitedAmmoType",
+    "params": ["typeid"]
 }, {
     "name": "GiveItem",
     "params": ["steamid", "itemid"]
