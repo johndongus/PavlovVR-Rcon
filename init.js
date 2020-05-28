@@ -76,57 +76,79 @@ function commandPrompt(socket) {
                 commandPrompt(socket)
             }
             if (selected.command === 'Kick') {
-                playerPrompt(socket, selected.command)
+				console.log(await commandHandler(socket, 'RefreshList'))
+				console.log('pick the steamID of the player you want to kick from the list above')
+				steam64Id = await anyPrompt('steamId64', true)
+				commandHandler(socket, 'Kick ' + steam64Id.toString())
+                commandPrompt(socket)
             }
             if (selected.command === 'InspectPlayer') {
-                playerPrompt(socket, selected.command)
+				console.log(await commandHandler(socket, 'RefreshList'))
+				console.log('pick the steamID of the player you want to inspect from the list above')
+				steam64Id = await anyPrompt('steamId64', true)
+				console.log(await commandHandler(socket, 'InspectPlayer ' + steam64Id.toString()))
+                commandPrompt(socket)
             }
             if (selected.command === 'SwitchTeam') {
-                team = await teamPrompt()
-                playerPrompt(socket, selected.command, team)
+				console.log(await commandHandler(socket, 'RefreshList'))
+				console.log('pick the steamID of the player you want switch teams from the list above')
+				steam64Id = await anyPrompt('steamId64', true)
+				team = await teamPrompt()
+				commandHandler(socket, 'SwitchTeam ' + steam64Id.toString() + ' ' + team)
+                commandPrompt(socket)
             }
             if (selected.command === 'Ban') {
-                steam64Id = await textPrompt('steamId64', true)
+				console.log(await commandHandler(socket, 'RefreshList'))
+				console.log('pick the steamID of the player you want ban from the list above')
+                steam64Id = await anyPrompt('steamId64', true)
                 if (steam64Id) {
                     commandHandler(socket, 'Ban ' + steam64Id.toString())
-                    commandPrompt(socket)
                 } else {
                     console.log('Not a Int / Steam 64 ID!')
-                    commandPrompt(socket)
                 }
+                commandPrompt(socket)
             }
             if (selected.command === 'Unban') {
-                steam64Id = await textPrompt('steamId64', true)
+				console.log(await commandHandler(socket, 'RefreshList'))
+				console.log('pick the steamID of the player you want unban from the list above')
+                steam64Id = await anyPrompt('steamId64', true)
                 if (steam64Id) {
                     commandHandler(socket, 'UnBan ' + steam64Id.toString())
-                    console.log('UnBan ' + steam64Id.toString())
-                    commandPrompt(socket)
                 } else {
                     console.log('Not a Int / Steam 64 ID!')
-                    commandPrompt(socket)
                 }
+				commandPrompt(socket)
             }
 
 
             if (selected.command === 'GiveTeamCash') {
                 team = await teamPrompt()
-                cashAmt = await textPrompt('int', true)
+				console.log('enter the amount of money')
+                cashAmt = await anyPrompt('int', true)
                 if (cashAmt) {
-                    commandHandler(socket, `GiveTeamCash ${team} ${cashAmt}`)
-                    commandPrompt(socket)
+                    commandHandler(socket, 'GiveTeamCash ' + team + ' ' + cashAmt)
                 } else {
                     console.log('Not a Int / Steam 64 ID!')
-                    commandPrompt(socket)
                 }
-
+				commandPrompt(socket)
             }
             if (selected.command === 'GiveItem') {
-                itemName = await textPrompt('string', true)
-                playerPrompt(socket, selected.command, itemName)
+				console.log(await commandHandler(socket, 'RefreshList'))
+				console.log('pick the steamID of the player you want to give an item from the list above')
+                steam64Id = await anyPrompt('steamId64', true)
+				console.log('enter the itemID you want to give to a player')
+                itemName = await anyPrompt('string', true)
+                commandHandler(socket, `GiveItem ` + steam64Id.toString() + ' ' + itemName)
+                commandPrompt(socket)
             }
             if (selected.command === 'GiveCash') {
-                itemName = await textPrompt('int', true)
-                playerPrompt(socket, selected.command, itemName)
+				console.log(await commandHandler(socket, 'RefreshList'))
+				console.log('pick the steamID of the player you want to give money from the list above')
+                steam64Id = await anyPrompt('steamId64', true)
+				console.log('enter the amount of money')
+				cashAmt = await anyPrompt('int', true)
+                commandHandler(socket, `GiveCash ` + steam64Id.toString() + ' ' + cashAmt)
+                commandPrompt(socket)
             }
             if (selected.command === 'ServerInfo') {
                 console.log(await commandHandler(socket, 'ServerInfo'))
@@ -134,7 +156,7 @@ function commandPrompt(socket) {
             }
 
             if (selected.command === 'RefreshList') {
-                await commandHandler(socket, 'RefreshList')
+                console.log(await commandHandler(socket, 'RefreshList'))
                 commandPrompt(socket)
             }
 
@@ -149,53 +171,6 @@ function commandPrompt(socket) {
 
 }
 
-function playerPrompt(socket, command, option, option2) {
-
-    // find a good delimiter
-    if (!socket.playerList.PlayerList) {
-        console.log('No players online :(')
-        return commandPrompt(socket);
-    }
-    inquirer.prompt([{
-        type: 'list',
-        name: 'player',
-        message: 'Select a server',
-        choices: socket.playerList.PlayerList.map(player => player.Username + ' | ' + player.UniqueId),
-    }, ]).then(selected => {
-        (async() => {
-            console.log('\033[2J');
-            steam64Id = selected.player.split(' | ')[1]
-            if (command.startsWith('Kick')) {
-                await commandHandler(socket, 'Kick ' + steam64Id)
-                console.log(selected.player.Username + " Was Kicked.")
-            }
-            if (command === 'InspectPlayer') {
-
-                console.log(await commandHandler(socket, 'InspectPlayer ' + steam64Id))
-            }
-            if (command === 'SwitchTeam') {
-                await commandHandler(socket, `SwitchTeam ${steam64Id} ${option}`)
-            }
-            if (command === 'GiveItem') {
-                await commandHandler(socket, `GiveItem ${steam64Id} ${option}`)
-            }
-            if (command === 'GiveCash') {
-                await commandHandler(socket, `GiveCash ${steam64Id} ${option}`)
-            }
-
-
-
-
-
-            //select server
-            //deal with player
-            //send back to commandPrompt()
-
-            commandPrompt(socket)
-        })();
-    });
-
-}
 
 function teamPrompt() {
     return new Promise(resolve => {
