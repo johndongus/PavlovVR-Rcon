@@ -26,14 +26,8 @@ function serverPrompt() {
                 }
                 if (activeSocket) commandPrompt(activeSocket);
             }
-
-
         })();
-
     });
-
-
-
 }
 
 function commandHandler(socket, command, params) {
@@ -122,8 +116,6 @@ function commandPrompt(socket) {
                 }
 				commandPrompt(socket)
             }
-
-
             if (selected.command === 'GiveTeamCash') {
                 team = await teamPrompt()
 				console.log('enter the amount of money')
@@ -264,15 +256,28 @@ function spinServer(server) {
 }
 
 
-commands = [{
+commands = [
+{
+    "name": "ServerInfo",
+    "params": []
+}, {
+    "name": "RefreshList",
+    "params": []
+}, {
+    "name": "InspectPlayer",
+    "params": ["steamid"]
+}, {
+    "name": "RotateMap",
+    "params": []
+}, {
     "name": "SwitchMap",
     "params": ["map", "mod"]
 }, {
     "name": "ResetSND",
     "params": []
 }, {
-    "name": "RotateMap",
-    "params": []
+    "name": "SwitchTeam",
+    "params": ["steamid", "teamid"]
 }, {
     "name": "Kick",
     "params": ["steamid"]
@@ -283,9 +288,6 @@ commands = [{
     "name": "Unban",
     "params": ["steamid"]
 }, {
-    "name": "SwitchTeam",
-    "params": ["steamid", "teamid"]
-}, {
     "name": "GiveItem",
     "params": ["steamid", "itemid"]
 }, {
@@ -295,15 +297,6 @@ commands = [{
     "name": "GiveTeamCash",
     "params": ["steamid", "CashAmt"]
 }, {
-    "name": "InspectPlayer",
-    "params": ["steamid"]
-}, {
-    "name": "ServerInfo",
-    "params": []
-}, {
     "name": "Disconnect",
-    "params": []
-}, {
-    "name": "RefreshList",
     "params": []
 }];
