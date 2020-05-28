@@ -67,6 +67,9 @@ function commandPrompt(socket) {
 				console.log(maps + '\nto change the map use the corresponding UGC-ID')
                 map = await anyPrompt('map', true)
                 mod = await anyPrompt('mod', true)
+				if (!mod) {
+					mod = 'SND'
+				}
                 cmd = 'SwitchMap ' + map + ' ' + mod
                 console.log(cmd)
                 commandHandler(socket, cmd)
